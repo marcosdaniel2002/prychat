@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoUser {
+  online
+  offline
+  away
+  busy
+}
+
+model Usuario {
+  id        String @id @default(uuid())
+  nombres   String
+  apellidos String
+  email     String @unique
+  username  String @unique
+  password  String
+
+  imagen      String?
+  estado_user EstadoUser @default(offline)
+  biografia   String?
+
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime?
+  status                 Boolean               @default(true)
+  // RELACIONES
+  sentFriendRequests     SolicitudAmistad[]    @relation("sentRequests")
+  receivedFriendRequests SolicitudAmistad[]    @relation("receivedRequests")
+  conversacions          Conversacion[]
+  miembroConversacions   MiembroConversacion[]
+  mensajes               Mensaje[]
+  mensajeLeidos          MensajeLeido[]
+}
+
+enum EstadoSolicitud {
+  pending
+  accepted
+  rejected
+}
+
+model SolicitudAmistad {
+  id               String          @id @default(uuid())
+  sender_id        String
+  receiver_id      String
+  responded_at     DateTime?
+  estado_solicitud EstadoSolicitud @default(pending)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  status    Boolean   @default(true)
+  // RELACIONES
+  sender    Usuario   @relation("sentRequests", fields: [sender_id], references: [id])
+  receiver  Usuario   @relation("receivedRequests", fields: [receiver_id], references: [id])
+}
+
+enum TIPO_CONVERSACION {
+  direct
+  group
+}
+
+model Conversacion {
+  id            String            @id @default(uuid())
+  creado_por_id String
+  tipo          TIPO_CONVERSACION @default(direct)
+  nombre        String?
+
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime?
+  status               Boolean               @default(true)
+  // RELACIONES
+  creado_por           Usuario               @relation(fields: [creado_por_id], references: [id])
+  miembroConversacions MiembroConversacion[]
+  mensajes             Mensaje[]
+}
+
+enum ROL_MIEMBRO {
+  member
+  admin
+}
+
+model MiembroConversacion {
+  id              String      @id @default(uuid())
+  conversacion_id String
+  usuario_id      String
+  rol             ROL_MIEMBRO @default(member)
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime?
+  status       Boolean      @default(true)
+  // RELACIONES
+  conversacion Conversacion @relation(fields: [conversacion_id], references: [id])
+  usuario      Usuario      @relation(fields: [usuario_id], references: [id])
+}
+
+enum TIPO_MENSAJE {
+  text
+  image
+  file
+  audio
+}
+
+model Mensaje {
+  id              String       @id @default(uuid())
+  conversacion_id String
+  sender_id       String
+  reply_to_id     String? // AUTO RELACION
+  tipo            TIPO_MENSAJE @default(text)
+  contenido       String
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?
+  status        Boolean        @default(true)
+  // RELACIONES
+  conversacion  Conversacion   @relation(fields: [conversacion_id], references: [id])
+  sender        Usuario?       @relation(fields: [sender_id], references: [id])
+  reply_to      Mensaje?       @relation("MensajeRespuesta", fields: [reply_to_id], references: [id])
+  respuestas    Mensaje[]      @relation("MensajeRespuesta")
+  mensajeLeidos MensajeLeido[]
+}
+
+model MensajeLeido {
+  id         String  @id @default(uuid())
+  mensaje_id String
+  usuario_id String
+  // RELACIONES
+  usuario    Usuario @relation(fields: [usuario_id], references: [id])
+  mensaje    Mensaje @relation(fields: [mensaje_id], references: [id])
+}
