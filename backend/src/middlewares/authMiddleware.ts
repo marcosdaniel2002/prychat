@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { AppError } from '../utils/AppError.ts';
-import { prisma } from '../lib/prisma.ts';
 import verifyToken from '../utils/verifyToken.ts';
 
 // READ THE TOKEN FROM THE REQUEST
@@ -18,7 +17,7 @@ export const authMiddleware = async function (req: Request, res: Response, next:
     }
 
     // VERIFY TOKEN
-    const user = verifyToken(token);
+    const user = await verifyToken(token);
 
     if (!user) {
       throw new AppError('Not authorized, user not exist', 401);

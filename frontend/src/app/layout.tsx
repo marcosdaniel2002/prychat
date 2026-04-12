@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import "material-symbols";
+import { Providers } from "@/providers/Provider";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -22,13 +23,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={manrope.variable}>
-      <body className="bg-surface text-on-background font-body h-screen overflow-hidden flex items-center justify-center">
-        {children}
-        {/* <!-- Background Decoration for Entire Page --> */}
-        <div className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none">
-          <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-primary-fixed/30 rounded-full blur-[120px]"></div>
-          <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-secondary-fixed/20 rounded-full blur-[150px]"></div>
-        </div>
+      <body className="bg-surface text-on-background font-body flex items-center justify-center">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

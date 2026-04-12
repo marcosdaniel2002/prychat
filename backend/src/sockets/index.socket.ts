@@ -9,7 +9,12 @@ export const usuariosConectados = new Map<string, string>();
 export function setupSockets(io: Server) {
   io.use(async (socket, next) => {
     try {
-      const token = socket.handshake.auth.token as string;
+      const cookie = socket.handshake.headers.cookie;
+      const token = cookie
+        ?.split(';')
+        .find((c) => c.trim().startsWith('jwt='))
+        ?.split('=')[1];
+
       if (!token) return next(new Error('Token requerido'));
 
       const user = await verifyToken(token);
@@ -25,7 +30,7 @@ export function setupSockets(io: Server) {
 
     // Inicialización
     usuariosConectados.set(usuario_id, socket.id);
-
+    console.log(`Usuario conectado: ${usuario_id}`);
     await prisma.usuario.update({
       where: { id: usuario_id },
       data: { estado_user: 'online' },

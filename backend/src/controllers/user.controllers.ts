@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../lib/prisma.js';
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -47,4 +47,46 @@ export const deleteUser = async (req: Request, res: Response) => {
     data: { status: false },
   });
   res.status(204).json({});
+};
+
+export const getPotentialFriends = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const usuario_id = req.user.id;
+
+    // Obtener IDs de usuarios con los que ya hay una solicitud activa o amistad
+    const solicitudes = await prisma.solicitudAmistad.findMany({
+      where: {
+        OR: [{ sender_id: usuario_id }, { receiver_id: usuario_id }],
+        status: true,
+      },
+      select: { sender_id: true, receiver_id: true },
+    });
+
+    const excluidos = new Set<string>([usuario_id]);
+    for (const s of solicitudes) {
+      excluidos.add(s.sender_id);
+      excluidos.add(s.receiver_id);
+    }
+
+    const users = await prisma.usuario.findMany({
+      where: {
+        status: true,
+        id: { notIn: Array.from(excluidos) },
+      },
+      select: {
+        id: true,
+        username: true,
+        nombres: true,
+        apellidos: true,
+        imagen: true,
+        biografia: true,
+        email: true,
+        estado_user: true,
+      },
+    });
+
+    res.json({ data: { total: users.length, users } });
+  } catch (err) {
+    next(err);
+  }
 };

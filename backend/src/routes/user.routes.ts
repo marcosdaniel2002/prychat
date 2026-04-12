@@ -6,9 +6,13 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  getPotentialFriends,
 } from '../controllers/user.controllers.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = Router();
+
+router.get('/potential-friends', authMiddleware, getPotentialFriends);
 
 router.get('/', getUsers);
 router.get('/:id', getUser);

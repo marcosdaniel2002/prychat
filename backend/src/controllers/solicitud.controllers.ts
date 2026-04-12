@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 
 import { prisma } from '../lib/prisma.ts';
 import { AppError } from '../utils/AppError.ts';
+import { usuariosConectados } from '../sockets/index.socket.ts';
+import { io } from '../index.ts';
 
 export const getSolicitudesRecibidas = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -104,10 +106,32 @@ export const enviarSolicitud = async (req: Request, res: Response, next: NextFun
       data: { sender_id, receiver_id },
       include: {
         receiver: {
-          select: { id: true, username: true, nombres: true, imagen: true },
+          select: {
+            id: true,
+            username: true,
+            nombres: true,
+            imagen: true,
+            apellidos: true,
+            biografia: true,
+            email: true,
+          },
         },
       },
     });
+
+    // SOCKET NOTIFICAR AL RECEPTOR
+    const socketId = usuariosConectados.get(receiver_id);
+    if (socketId) {
+      console.log('SE ENCONTRO USUARIO CONECTADO');
+      const count = await prisma.solicitudAmistad.count({
+        where: {
+          receiver_id,
+          estado_solicitud: 'pending',
+          status: true,
+        },
+      });
+      io.to(socketId).emit('solicitud:nueva', { count: count });
+    }
 
     res.json({
       data: {
@@ -269,6 +293,26 @@ export const cancelarSolicitud = async (req: Request, res: Response, next: NextF
     });
 
     res.json({ message: 'Solicitud cancelada' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// CONSULTAS LIGERAS
+export const countSolicitudesPendientes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const count = await prisma.solicitudAmistad.count({
+      where: {
+        receiver_id: req.user.id,
+        estado_solicitud: 'pending',
+        status: true,
+      },
+    });
+    res.json({ data: { count } });
   } catch (err) {
     next(err);
   }

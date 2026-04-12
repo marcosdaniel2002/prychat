@@ -7,6 +7,7 @@ import {
   getSolicitudesEnviadas,
   getSolicitudesRecibidas,
   cancelarSolicitud,
+  countSolicitudesPendientes,
 } from '../controllers/solicitud.controllers.ts';
 
 const router = Router();
@@ -15,6 +16,7 @@ router.use(authMiddleware);
 
 router.get('/enviadas', getSolicitudesEnviadas);
 router.get('/recibidas', getSolicitudesRecibidas);
+router.get('/recibidas/count', countSolicitudesPendientes);
 
 router.post('/', enviarSolicitud);
 

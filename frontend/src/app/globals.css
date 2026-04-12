@@ -21,6 +21,20 @@
   box-shadow: 0 0 0 2px #b0ecff;
 }
 
+label[for]:has(+ div input[required])::after,
+label[for]:has(+ input[required])::after,
+label[for]:has(+ div input[data-required="true"])::after {
+  content: " *";
+  color: #ef4444;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+  transform: none !important;
+}
+
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
