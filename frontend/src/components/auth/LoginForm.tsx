@@ -11,8 +11,8 @@ function LoginForm() {
       const res = await login(data);
       toast.success(`Bienvenido, ${res.nombres}`);
       router.replace("/");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   }
   return (

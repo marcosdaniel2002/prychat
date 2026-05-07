@@ -11,8 +11,8 @@ function RegisterForm() {
     try {
       await register(data);
       router.replace("/");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   }
   return (

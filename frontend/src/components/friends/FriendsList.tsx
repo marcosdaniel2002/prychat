@@ -1,5 +1,4 @@
 // FriendsList.tsx — Server Component
-import { Usuario } from "@/types/auth/usuario.types";
 import { getPotentialFriends } from "@/services/friends/get-potential-friends.server";
 import FriendCard from "./FriendCard";
 

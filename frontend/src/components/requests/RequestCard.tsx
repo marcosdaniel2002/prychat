@@ -14,16 +14,16 @@ function RequestCard({ solicitud }: Props) {
     try {
       await aceptarSolicitud(solicitud.id);
       toast.success("Request accepted successfully.");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   }
 
   async function handleDecline() {
     try {
       await rechazarSolicitud(solicitud.id);
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   }
 

@@ -1,6 +1,5 @@
 import ListRequests from "@/components/requests/ListRequests";
 import Loading from "@/components/shared/Loading";
-import Link from "next/link";
 import { Suspense } from "react";
 
 function page() {
@@ -33,7 +32,7 @@ function page() {
             All Clear
           </h3>
           <p className="text-on-surface-variant mt-2">
-            You've responded to all pending contact requests.
+            You&apos;ve responded to all pending contact requests.
           </p>
         </div>
       </div>

@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { updatePassword } from "@/services/auth/updatePassword.services";
@@ -7,18 +6,16 @@ import { useState } from "react";
 
 function ChangePasswordForm() {
   const [isPending, setIsPending] = useState(false);
-  const router = useRouter();
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
     // ✅ FormData desde el form completo, como si fuera un form normal
     const formData = new FormData(e.currentTarget);
     try {
-      const res = await updatePassword(formData);
+      await updatePassword(formData);
       toast.success(`Contraseña actualizada con éxito.`);
-      //   router.replace("/");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     } finally {
       setIsPending(false);
     }

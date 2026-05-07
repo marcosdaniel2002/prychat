@@ -15,10 +15,10 @@ function FriendCard({ usuario }: Props) {
   const onSendRequest = async () => {
     // Aquí iría la lógica para enviar la solicitud de amistad
     try {
-      const res = await enviarSolicitud(usuario.id);
+      await enviarSolicitud(usuario.id);
       toast.success("Friend request sent!");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   };
 

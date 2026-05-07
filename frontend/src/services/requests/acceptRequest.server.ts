@@ -13,7 +13,7 @@ export interface SuccessResponse {
   };
 }
 
-export const aceptarSolicitud = async function (id: String) {
+export const aceptarSolicitud = async function (id: string) {
   try {
     // await sleep(2);
     const cookieStore = await cookies();

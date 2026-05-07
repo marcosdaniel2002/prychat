@@ -2,15 +2,12 @@
 
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-import { updatePassword } from "@/services/auth/updatePassword.services";
 import { useAuth } from "@/contexts/AuthContext";
 import { updateProfile } from "@/services/auth/updateProfile.services";
 
 function ProfileForm() {
   const [isPending, setIsPending] = useState(false);
-  const router = useRouter();
   const user = useAuth();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -19,11 +16,10 @@ function ProfileForm() {
     // ✅ FormData desde el form completo, como si fuera un form normal
     const formData = new FormData(e.currentTarget);
     try {
-      const res = await updateProfile(formData);
+      await updateProfile(formData);
       toast.success(`Perfil actualizado con éxito.`);
-      //   router.replace("/");
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     } finally {
       setIsPending(false);
     }
@@ -103,7 +99,7 @@ function ProfileForm() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4">
-            <button className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold shadow-[0_4px_12px_rgba(33,106,23,0.2)] hover:scale-[1.02] active:scale-95 transition-all">
+            <button disabled={isPending} className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold shadow-[0_4px_12px_rgba(33,106,23,0.2)] hover:scale-[1.02] active:scale-95 transition-all">
               Save Changes
             </button>
           </div>

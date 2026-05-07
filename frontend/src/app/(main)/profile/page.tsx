@@ -7,7 +7,7 @@ import Modal from "@/components/shared/Modal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 
-function page() {
+function Page() {
   const [modalFormAvatar, setModalFormAvatar] = useState(false);
   const user = useAuth();
   return (
@@ -98,4 +98,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

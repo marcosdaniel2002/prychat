@@ -1,5 +1,4 @@
 // CLIENT-SIDE SERVICE
-import { sleep } from "@/helpers/sleep";
 import { Usuario } from "@/types/auth/usuario.types";
 
 export interface SuccessResponse {

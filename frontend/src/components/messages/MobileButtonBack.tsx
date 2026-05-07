@@ -3,7 +3,7 @@
 import { useChatContext } from "@/contexts/ChatContext";
 
 function MobileButtonBack() {
-  const { chatOpen, setChatOpen } = useChatContext();
+  const { setChatOpen } = useChatContext();
   return (
     <button
       onClick={() => setChatOpen(false)}

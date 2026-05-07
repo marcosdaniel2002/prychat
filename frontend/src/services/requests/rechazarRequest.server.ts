@@ -1,7 +1,6 @@
 // SERVER-SIDE SERVICE
 "use server";
 
-import { Conversacion } from "@/types/conversacion/conversacion.types";
 import { SolicitudAmistad } from "@/types/solicitud/solicitud.types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -12,7 +11,7 @@ export interface SuccessResponse {
   };
 }
 
-export const rechazarSolicitud = async function (id: String) {
+export const rechazarSolicitud = async function (id: string) {
   try {
     // await sleep(2);
     const cookieStore = await cookies();

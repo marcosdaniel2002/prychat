@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import toast from "react-hot-toast";
-import DropzoneCustom, { DropzoneFile } from "../shared/DropzoneCustom";
+import DropzoneCustom from "../shared/DropzoneCustom";
 import { updateAvatar } from "@/actions/auth/update-avatar.action";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,7 +11,7 @@ interface AvatarFormProps {
   onClose?: () => void;
 }
 
-function AvatarForm({ currentImage, onClose }: AvatarFormProps) {
+function AvatarForm({ onClose }: AvatarFormProps) {
   const router = useRouter();
   const user = useAuth();
 
@@ -41,9 +40,9 @@ function AvatarForm({ currentImage, onClose }: AvatarFormProps) {
       await updateAvatar(formData);
       toast.success("Avatar actualizado con éxito.");
       router.refresh(); // ✅ Re-ejecuta el layout y trae el usuario actualizado del servidor
-      onClose && onClose();
-    } catch (err: any) {
-      toast.error(err.message);
+      if (onClose) onClose();
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   }
 

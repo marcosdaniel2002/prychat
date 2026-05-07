@@ -25,7 +25,7 @@ function page() {
       <div className="mt-16 p-12 rounded-[3rem] bg-secondary-fixed/30 flex flex-col md:flex-row items-center justify-between gap-8 border border-white/40">
         <div className="max-w-lg">
           <h2 className="text-2xl font-bold mb-2">
-            Can't find who you're looking for?
+            Can&apos;t find who you&apos;re looking for?
           </h2>
           <p className="text-on-surface-variant">
             Try searching by professional tags like #design, #development, or

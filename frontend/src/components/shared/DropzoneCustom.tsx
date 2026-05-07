@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileRejection } from "react-dropzone";
 
 const MAX_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_TYPES = { "image/png": [], "image/jpeg": [], "image/webp": [] };
@@ -60,7 +60,7 @@ function DropzoneCustom({
   }
 
   const onDrop = useCallback(
-    (accepted: File[], rejected: any[]) => {
+    (accepted: File[], rejected: FileRejection[]) => {
       if (rejected.length > 0) {
         const code = rejected[0].errors[0]?.code;
         const msg =
