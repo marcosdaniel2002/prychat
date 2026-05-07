@@ -17,7 +17,15 @@ export const getSolicitudesRecibidas = async (req: Request, res: Response, next:
       },
       include: {
         sender: {
-          select: { id: true, username: true, nombres: true, apellidos: true, imagen: true },
+          select: {
+            id: true,
+            username: true,
+            nombres: true,
+            apellidos: true,
+            imagen: true,
+            biografia: true,
+            email: true,
+          },
         },
       },
       orderBy: { createdAt: 'desc' },

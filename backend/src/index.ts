@@ -16,6 +16,7 @@ import userRoutes from './routes/user.routes.ts';
 import authRoutes from './routes/auth.routes.ts';
 import solicitudRoutes from './routes/solicitud.routes.ts';
 import mensajesRoutes from './routes/mensajes.routes.ts';
+import conversacionesRoutes from './routes/conversacion.routes.ts';
 import { cleanupFiles } from './middlewares/cleanFilesMiddleware.ts';
 
 const app = express();
@@ -48,6 +49,7 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/solicitudes', solicitudRoutes);
 app.use('/mensajes', mensajesRoutes);
+app.use('/conversaciones', conversacionesRoutes);
 
 // MIDDLEWARES
 app.use(cleanupFiles);

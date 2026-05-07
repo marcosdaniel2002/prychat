@@ -7,6 +7,10 @@ export function useFriendStatus(usuario_id: string, estadoInicial: string) {
   const [estado, setEstado] = useState(estadoInicial);
 
   useEffect(() => {
+    setEstado(estadoInicial);
+  }, [usuario_id, estadoInicial]);
+
+  useEffect(() => {
     const handler = (data: { usuario_id: string; estado: string }) => {
       if (data.usuario_id === usuario_id) {
         setEstado(data.estado);
@@ -17,7 +21,6 @@ export function useFriendStatus(usuario_id: string, estadoInicial: string) {
     return () => {
       socket.off("user:status_changed", handler);
     };
-  }, [usuario_id]);
-
+  }, [usuario_id, socket]);
   return estado;
 }

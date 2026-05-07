@@ -30,6 +30,7 @@ export const getMensajes = async (req: Request, res: Response, next: NextFunctio
       ...(cursor && { cursor: { id: cursor }, skip: 1 }),
       include: {
         sender: { select: { id: true, username: true, imagen: true } },
+        mensajeLeidos: { select: { usuario_id: true } },
         reply_to: {
           select: {
             id: true,
@@ -145,6 +146,7 @@ export const enviarMensaje = async (req: Request, res: Response, next: NextFunct
       },
       include: {
         sender: { select: { id: true, username: true, imagen: true } },
+        mensajeLeidos: { select: { usuario_id: true } },
         reply_to: {
           select: {
             id: true,
@@ -214,6 +216,55 @@ export const marcarLeido = async (req: Request, res: Response, next: NextFunctio
     });
 
     res.status(201).json({ data: { mensajeLeido } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const marcarLeidoConversacion = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const usuario_id = req.user.id;
+    const { conversacion_id } = req.body;
+
+    if (!conversacion_id) {
+      throw new AppError('conversacion_id es requerido', 400);
+    }
+
+    const esMiembro = await prisma.miembroConversacion.findFirst({
+      where: { conversacion_id, usuario_id, status: true },
+    });
+
+    if (!esMiembro) {
+      throw new AppError('No tienes acceso a esta conversación', 403);
+    }
+
+    const mensajesNoLeidos = await prisma.mensaje.findMany({
+      where: {
+        conversacion_id,
+        status: true,
+        sender_id: { not: usuario_id },
+        mensajeLeidos: { none: { usuario_id } },
+      },
+      select: { id: true },
+    });
+
+    if (mensajesNoLeidos.length === 0) {
+      res.json({ data: { message: 'No hay mensajes sin leer', total: 0 } });
+      return;
+    }
+
+    await prisma.mensajeLeido.createMany({
+      data: mensajesNoLeidos.map((m) => ({ mensaje_id: m.id, usuario_id })),
+      skipDuplicates: true,
+    });
+
+    io.to(conversacion_id).emit('conversation:read', {
+      conversacion_id,
+      usuario_id,
+      mensaje_ids: mensajesNoLeidos.map((m) => m.id),
+    });
+
+    res.json({ data: { message: 'Mensajes marcados como leídos', total: mensajesNoLeidos.length } });
   } catch (err) {
     next(err);
   }

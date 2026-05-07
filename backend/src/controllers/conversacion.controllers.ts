@@ -48,6 +48,7 @@ export const getConversaciones = async (req: Request, res: Response, next: NextF
             mensajes: {
               where: {
                 status: true,
+                sender_id: { not: usuario_id }, // excluir mis propios mensajes
                 mensajeLeidos: {
                   none: { usuario_id }, // MENSAJES QUE YO NO HE LEIDO
                 },
@@ -123,6 +124,7 @@ export const getConversacion = async (req: Request, res: Response, next: NextFun
             mensajes: {
               where: {
                 status: true,
+                sender_id: { not: usuario_id }, // excluir mis propios mensajes
                 mensajeLeidos: {
                   none: { usuario_id }, // MENSAJES QUE YO NO HE LEIDO
                 },
