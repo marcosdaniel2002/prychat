@@ -1,14 +1,22 @@
-// src/types/express.d.ts
-
-import { Usuario } from '../generated/prisma/client.js';
+export {};
 
 declare global {
   namespace Express {
     interface Request {
-      // authenticacion
-      user?: Usuario;
-      // archivos
-      files?: Record<string, import('multer').File[]> | import('multer').File[];
+      user?: {
+        id: string;
+        nombres: string;
+        apellidos: string;
+        email: string;
+        username: string;
+        password: string;
+        imagen: string | null;
+        estado_user: 'online' | 'offline' | 'away' | 'busy';
+        biografia: string | null;
+        createdAt: Date;
+        updatedAt: Date | null;
+        status: boolean;
+      };
       currentFiles?: Record<string, string | null>;
       fileResult?: Record<string, string | null>;
     }
