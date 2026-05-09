@@ -1,6 +1,6 @@
 // src/types/express.d.ts
 
-import { Usuario } from '@prisma/client';
+import { Usuario } from '../generated/prisma/client.js';
 
 declare global {
   namespace Express {
