@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone, FileRejection } from "react-dropzone";
+import Image from "next/image";
 
 const MAX_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_TYPES = { "image/png": [], "image/jpeg": [], "image/webp": [] };
@@ -151,10 +152,12 @@ function DropzoneCustom({
       {/* Background preview image — always rendered when there's a file */}
       {current && (
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src={current.preview}
             alt="preview background"
-            className="w-full h-full object-cover"
+            fill
+            unoptimized
+            className="object-cover"
           />
           {/* Subtle darkening overlay so text is readable */}
           <div className="absolute inset-0 bg-black/30" />

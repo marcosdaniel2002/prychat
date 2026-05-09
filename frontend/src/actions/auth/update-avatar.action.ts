@@ -8,9 +8,6 @@ export interface SuccessResponse {
 
 export const updateAvatar = async function (data: FormData) {
   try {
-    for (const [key, value] of data.entries()) {
-      console.log(key, value);
-    }
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/update/avatar`,
       {
