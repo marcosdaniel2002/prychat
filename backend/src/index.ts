@@ -1,3 +1,5 @@
+/// <reference path="./interfaces/express.d.ts" />
+
 import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
