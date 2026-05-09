@@ -51,7 +51,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const getPotentialFriends = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
 
     // Obtener IDs de usuarios con los que ya hay una solicitud activa o amistad
     const solicitudes = await prisma.solicitudAmistad.findMany({

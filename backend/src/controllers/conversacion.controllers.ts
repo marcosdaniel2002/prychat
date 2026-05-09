@@ -5,7 +5,7 @@ import { ROL_MIEMBRO } from '../generated/prisma/enums.ts';
 
 export const getConversaciones = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
 
     const conversaciones = await prisma.conversacion.findMany({
       where: {
@@ -94,7 +94,7 @@ export const getConversaciones = async (req: Request, res: Response, next: NextF
 
 export const getConversacion = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string }; // id de la conversacion
 
     const conversacion = await prisma.conversacion.findUnique({
@@ -162,7 +162,7 @@ export const getConversacion = async (req: Request, res: Response, next: NextFun
 
 export const crearConversacion = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { nombre, miembros_ids } = req.body;
     // miembros_ids: string[] — ids de los usuarios a agregar
 
@@ -224,7 +224,7 @@ export const agregarMiembro = async (req: Request, res: Response, next: NextFunc
   try {
     const { id: conversacion_id } = req.params as { id: string };
     const { miembro_id } = req.body;
-    const { usuario_id } = req.user.id;
+    const { usuario_id } = req.user!.id;
 
     const conversacion = await prisma.conversacion.findFirst({
       where: {
@@ -302,7 +302,7 @@ export const agregarMiembro = async (req: Request, res: Response, next: NextFunc
 
 export const cambiarRol = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id, usuarioId: miembro_id } = req.params as { id: string; usuarioId: string };
     const { rol } = req.body as { rol: 'member' | 'admin' };
 
@@ -384,7 +384,7 @@ export const cambiarRol = async (req: Request, res: Response, next: NextFunction
 
 export const removerMiembro = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id, usuarioId } = req.params as { id: string; usuarioId: string };
 
     // 1. Verificar que la conversación existe y es grupo
@@ -456,7 +456,7 @@ export const removerMiembro = async (req: Request, res: Response, next: NextFunc
 
 export const eliminarConversacion = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string };
 
     // 1. Verificar que la conversación existe

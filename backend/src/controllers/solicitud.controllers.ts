@@ -7,7 +7,7 @@ import { io } from '../index.ts';
 
 export const getSolicitudesRecibidas = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const receiver_id = req.user.id;
+    const receiver_id = req.user!.id;
 
     const solicitudes = await prisma.solicitudAmistad.findMany({
       where: {
@@ -44,7 +44,7 @@ export const getSolicitudesRecibidas = async (req: Request, res: Response, next:
 
 export const getSolicitudesEnviadas = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sender_id = req.user.id;
+    const sender_id = req.user!.id;
 
     const solicitudes = await prisma.solicitudAmistad.findMany({
       where: {
@@ -73,7 +73,7 @@ export const getSolicitudesEnviadas = async (req: Request, res: Response, next: 
 
 export const enviarSolicitud = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sender_id = req.user.id;
+    const sender_id = req.user!.id;
     const { receiver_id } = req.body;
 
     if (sender_id === receiver_id) {
@@ -153,7 +153,7 @@ export const enviarSolicitud = async (req: Request, res: Response, next: NextFun
 
 export const aceptarSolicitud = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string }; // id de la solicitud
 
     // 1. Buscar la solicitud
@@ -221,7 +221,7 @@ export const aceptarSolicitud = async (req: Request, res: Response, next: NextFu
 
 export const rechazarSolicitud = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string }; // id de la solicitud
 
     // 1. Buscar la solicitud
@@ -271,7 +271,7 @@ export const rechazarSolicitud = async (req: Request, res: Response, next: NextF
 
 export const cancelarSolicitud = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sender_id = req.user.id;
+    const sender_id = req.user!.id;
     const { id } = req.params as { id: string };
 
     const solicitud = await prisma.solicitudAmistad.findUnique({
@@ -315,7 +315,7 @@ export const countSolicitudesPendientes = async (
   try {
     const count = await prisma.solicitudAmistad.count({
       where: {
-        receiver_id: req.user.id,
+        receiver_id: req.user!.id,
         estado_solicitud: 'pending',
         status: true,
       },

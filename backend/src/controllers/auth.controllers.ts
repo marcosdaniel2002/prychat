@@ -117,7 +117,7 @@ export const me = async (req: Request, res: Response, next: NextFunction) => {
 export const updateAvatar = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const currentUser = await prisma.usuario.findUnique({
-      where: { id: req.user.id, status: true },
+      where: { id: req.user!.id, status: true },
       select: { imagen: true },
     });
 
@@ -128,7 +128,7 @@ export const updateAvatar = async (req: Request, res: Response, next: NextFuncti
     const { imagen } = await resolveFileResult(req, [{ fieldName: 'imagen' }]);
 
     const updatedUser = await prisma.usuario.update({
-      where: { id: req.user.id },
+      where: { id: req.user!.id },
       data: { imagen: imagen ?? null },
     });
 
@@ -158,7 +158,7 @@ export const updatePassword = async (req: Request, res: Response, next: NextFunc
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
     const updatedUser = await prisma.usuario.update({
-      where: { id: req.user.id },
+      where: { id: req.user!.id },
       data: { password: hashedPassword },
     });
 

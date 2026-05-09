@@ -5,7 +5,7 @@ import { io } from '../index.ts';
 
 export const getMensajes = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const conversacion_id = req.query.conversacion_id as string | undefined;
     const take = Number(req.query.limit) || 20;
     const cursor = req.query.cursor as string | undefined;
@@ -58,7 +58,7 @@ export const getMensajes = async (req: Request, res: Response, next: NextFunctio
 
 export const getMensajesNoLeidos = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const conversacion_id = req.query.conversacion_id as string | undefined;
 
     if (!conversacion_id) {
@@ -103,7 +103,7 @@ export const getMensajesNoLeidos = async (req: Request, res: Response, next: Nex
 
 export const enviarMensaje = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const sender_id = req.user.id;
+    const sender_id = req.user!.id;
     const { conversacion_id, contenido, tipo, reply_to_id } = req.body;
 
     // 1. Validar campos requeridos
@@ -174,7 +174,7 @@ export const enviarMensaje = async (req: Request, res: Response, next: NextFunct
 
 export const marcarLeido = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string }; // mensaje_id
 
     // 1. Verificar que el mensaje existe
@@ -223,7 +223,7 @@ export const marcarLeido = async (req: Request, res: Response, next: NextFunctio
 
 export const marcarLeidoConversacion = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { conversacion_id } = req.body;
 
     if (!conversacion_id) {
@@ -272,7 +272,7 @@ export const marcarLeidoConversacion = async (req: Request, res: Response, next:
 
 export const eliminarMensaje = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const usuario_id = req.user.id;
+    const usuario_id = req.user!.id;
     const { id } = req.params as { id: string };
 
     // 1. Verificar que el mensaje existe
