@@ -60,6 +60,11 @@ app.use(errorHandler);
 // SOCKET
 setupSockets(io);
 
-// app.listen(PORT); // ESCUCHAMOS LA APP DE EXPRESS
-server.listen(PORT); // ESCUCHAMOS EL SERVER DE SOCKET IO
-console.log('Server on port', PORT);
+// Solo levanta el servidor en local (no en Vercel)
+if (!process.env.VERCEL) {
+  server.listen(PORT, () => {
+    console.log('Server on port', PORT);
+  });
+}
+
+export default app;
