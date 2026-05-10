@@ -20,8 +20,14 @@ export const register = async function (data: FormData) {
     );
 
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message);
+      let message = `Error del servidor (${res.status})`;
+      try {
+        const error = await res.json();
+        message = error.message ?? message;
+      } catch {
+        // la respuesta no es JSON (ej. página HTML de error de Vercel)
+      }
+      throw new Error(message);
     }
 
     const response: SuccessResponse = await res.json();
